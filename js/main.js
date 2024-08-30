@@ -66,7 +66,7 @@ function redirectToPage(response) {
 
     // Redirect to to the redirect URL   
     console.log("Redirecting to: " + redirectUrl);
-    location.replace(redirectUrl); 
+    // location.replace(redirectUrl); 
 }
 
 /**
