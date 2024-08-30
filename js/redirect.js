@@ -87,6 +87,7 @@ function redirectToPage(response) {
         }
     } catch (e) {
         console.log("Error: " + e);
+        redirectUrl = BASE_SHORTENER_URL + "?error-code=500&error-message=Internal%20Server%20Error";
     }
 
     // Redirect to to the redirect URL   
