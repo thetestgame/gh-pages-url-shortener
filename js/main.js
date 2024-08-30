@@ -37,6 +37,23 @@ function isUrl(url) {
 }
 
 /**
+ * Checks if the issuer is authorized to use the shortener.
+ * @function IsIssuerAuthorized
+ * @param {*} issuer Issuer to check
+ * @returns {boolean} true if the issuer is authorized, false otherwise
+ */
+function IsIssuerAuthorized(issuer) {
+    // Load the json file from BASE_SHORTENER_URL/data/users.json and
+    // parse the json file to check if the issuer is authorized.
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", BASE_SHORTENER_URL + "data/users.json", false);
+    xhr.send();
+
+    var users = JSON.parse(xhr.response);
+    return users.includes(issuer);
+}
+
+/**
  * Redirects the user to the corresponding website based on the response
  * from the GitHub issues API. If the URL is invalid, the user is redirected
  * back to the shortener's website.
@@ -49,16 +66,23 @@ function redirectToPage(response) {
     var redirectUrl = BASE_SHORTENER_URL;
 
     try {
+        // Parse the response from the GitHub issues API
         var payload = JSON.parse(response);
         var title = payload.title;
 
+        // Log debug information to the console about the
+        // issue that the user is trying to access.
         console.log("Title: " + title);
         console.log("URL: " + new URL(title).hostname);
 
-        // Check if the URL is invalid and if it is set the redirect URL
-        // to the issue's url.
-        if (!title || !isUrl(title) || new URL(title).hostname != location.hostname) {
-            redirectUrl = title;
+        // Verify that the issuer is authorized to use the shortener
+        if (IsIssuerAuthorized(payload.user.login)) {
+        
+            // Check if the URL is invalid and if it is set the redirect URL
+            // to the issue's url.
+            if (!title || !isUrl(title) || new URL(title).hostname != location.hostname) {
+                redirectUrl = title;
+            }
         }
     } catch (e) {
         console.log("Error: " + e);
