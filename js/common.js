@@ -31,7 +31,5 @@ const BASE_SHORTENER_URL = "https://thetest.games/";
  * @returns {string} The base URL of the current website
  */
 function getBaseUrl() {
-    const url = window.location.href;
-    const baseUrl = url.substring(0, url.indexOf('/', url.indexOf('//') + 2));
-    return baseUrl;
+    return BASE_SHORTENER_URL;
 }

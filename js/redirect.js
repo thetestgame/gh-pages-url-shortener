@@ -55,6 +55,23 @@ function isIssuerAuthorized(issuer) {
 }
 
 /**
+ * Redirects the user to the shortener's website with an error message
+ * @function redirectToError
+ * @param {*} errorCode Error code to display
+ * @param {*} errorMessage Error message to display
+ */
+function redirectToError(errorCode, errorMessage) {
+    console.log("Redirect Error. Code: " + errorCode + " Message: " + errorMessage);
+
+    var location = window.location;
+    var encodedMessage = encodeURIComponent(errorMessage);
+    var baseUrl = getBaseUrl();
+
+    var errorLocation = baseUrl + "?error-code=" + errorCode + "&error-message=" + encodedMessage;
+    location.replace(errorLocation);
+}
+
+/**
  * Redirects the user to the corresponding website based on the response
  * from the GitHub issues API. If the URL is invalid, the user is redirected
  * back to the shortener's website.
@@ -64,8 +81,6 @@ function isIssuerAuthorized(issuer) {
  */
 function redirectToPage(response) {
     var location = window.location;
-    var redirectUrl = getBaseUrl();
-
     try {
         // Parse the response from the GitHub issues API
         var payload = JSON.parse(response);
@@ -82,17 +97,15 @@ function redirectToPage(response) {
             // Check if the URL is invalid and if it is set the redirect URL
             // to the issue's url.
             if (!title || !isUrl(title) || new URL(title).hostname != location.hostname) {
-                redirectUrl = title;
+                console.log("Redirecting to: " + title);
+                location.replace(title); 
             }
+        } else {
+            redirectToError(401, "Unauthorized url");
         }
     } catch (e) {
-        console.log("Error: " + e);
-        redirectUrl = getBaseUrl() + "?error-code=500&error-message=Internal%20Server%20Error";
+        redirectToError(500, e.message);
     }
-
-    // Redirect to to the redirect URL   
-    console.log("Redirecting to: " + redirectUrl);
-    location.replace(redirectUrl); 
 }
 
 /**
