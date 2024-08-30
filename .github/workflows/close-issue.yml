@@ -1,0 +1,32 @@
+name: Close Issue if URL
+on:
+  issues:
+    types:
+      - opened  # Trigger the workflow when a new issue is opened
+
+jobs:
+  close-issue:
+    runs-on: ubuntu-latest  # Run the job on the latest version of Ubuntu
+
+    steps:
+      - name: Check if issue title is a URL
+        id: check-url
+        run: |
+          if [[ ${{ github.event.issue.title }} =~ ^https?:// ]]; then
+            echo "::set-output name=is_url::true"
+          else
+            echo "::set-output name=is_url::false" 
+          fi
+
+      - name: Close issue if title is a URL
+        if: steps.check-url.outputs.is_url == 'true' 
+        uses: actions/github-script@v4  # Use the 'github-script' action to interact with the GitHub API
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }} 
+          script: |
+            github.issues.update({  # Use the 'update' method of the 'issues' API to close the issue
+              owner: context.repo.owner,  # Get the owner of the repository
+              repo: context.repo.repo,  # Get the repository name
+              issue_number: context.issue.number,  # Get the issue number
+              state: 'closed'  # Set the state of the issue to 'closed'
+            })
