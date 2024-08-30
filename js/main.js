@@ -38,10 +38,11 @@ function redirect() {
             }
         } catch (e) {} 
     
-        location.replace(redirectUrl); // Redirect to to the redirect URL       
+        console.log(redirectUrl);
+        //location.replace(redirectUrl); // Redirect to to the redirect URL       
     };
 
-    xhr.onerror = function () { location.replace(BASE_SHORTENER_URL); };
+    //xhr.onerror = function () { location.replace(BASE_SHORTENER_URL); };
     xhr.open("GET", GITHUB_ISSUES_LINK + issueNumber);
     xhr.send();
 }
