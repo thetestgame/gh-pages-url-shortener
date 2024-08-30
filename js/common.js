@@ -22,20 +22,16 @@
  * SOFTWARE.
  */
 
-// Load the error code from a error-code query parameter
-const urlParams = new URLSearchParams(window.location.search);
-const errorCode = urlParams.get('error-code');
+// Define our constants
+const GITHUB_ISSUES_LINK ="https://api.github.com/repos/thetestgame/gh-pages-url-shortener/issues/";
+const BASE_SHORTENER_URL = "https://thetest.games/";
 
-// If we have an error code set the inner text and the data-text 
-// attribute to match the query parameter.
-if (errorCode) {
-  document.getElementById('error-code').innerText = errorCode;
-  document.getElementById('error-code').setAttribute('data-text', errorCode);
-}
-
-// Load the error message from a error-message query parameter
-// and set the inner text and the data-text attribute to match the query parameter.
-const errorMessage = urlParams.get('error-message');
-if (errorMessage) {
-  document.getElementById('error-message').innerText = errorMessage;
+/**
+ * Retrieves the base URL of the current website.
+ * @returns {string} The base URL of the current website
+ */
+function getBaseUrl() {
+    const url = window.location.href;
+    const baseUrl = url.substring(0, url.indexOf('/', url.indexOf('//') + 2));
+    return baseUrl;
 }

@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-const GITHUB_ISSUES_LINK ="https://api.github.com/repos/thetestgame/gh-pages-url-shortener/issues/";
-const BASE_SHORTENER_URL = "https://ttg.wtf/";
 const PATH_SEGMENTS_TO_SKIP = 0;
 
 /**
@@ -43,11 +41,13 @@ function isUrl(url) {
  * @param {*} issuer Issuer to check
  * @returns {boolean} true if the issuer is authorized, false otherwise
  */
-function IsIssuerAuthorized(issuer) {
-    // Load the json file from BASE_SHORTENER_URL/data/users.json and
+function isIssuerAuthorized(issuer) {
+    // Load the json file from <domain>/data/users.json and
     // parse the json file to check if the issuer is authorized.
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", BASE_SHORTENER_URL + "data/users.json", false);
+    var baseUrl = getBaseUrl();
+
+    xhr.open("GET", baseUrl + "data/users.json", false);
     xhr.send();
 
     var users = JSON.parse(xhr.response);
@@ -64,7 +64,7 @@ function IsIssuerAuthorized(issuer) {
  */
 function redirectToPage(response) {
     var location = window.location;
-    var redirectUrl = BASE_SHORTENER_URL;
+    var redirectUrl = getBaseUrl();
 
     try {
         // Parse the response from the GitHub issues API
@@ -77,7 +77,7 @@ function redirectToPage(response) {
         console.log("URL: " + new URL(title).hostname);
 
         // Verify that the issuer is authorized to use the shortener
-        if (IsIssuerAuthorized(payload.user.login)) {
+        if (isIssuerAuthorized(payload.user.login)) {
         
             // Check if the URL is invalid and if it is set the redirect URL
             // to the issue's url.
@@ -87,7 +87,7 @@ function redirectToPage(response) {
         }
     } catch (e) {
         console.log("Error: " + e);
-        redirectUrl = BASE_SHORTENER_URL + "?error-code=500&error-message=Internal%20Server%20Error";
+        redirectUrl = getBaseUrl() + "?error-code=500&error-message=Internal%20Server%20Error";
     }
 
     // Redirect to to the redirect URL   
@@ -108,7 +108,7 @@ function redirect() {
     // and redirect the user to the corresponding website
     var xhr = new XMLHttpRequest();
     xhr.onload = function() { redirectToPage(xhr.response); };
-    xhr.onerror = function () { location.replace(BASE_SHORTENER_URL); };
+    xhr.onerror = function () { location.replace(getBaseUrl()); };
     xhr.open("GET", GITHUB_ISSUES_LINK + issueNumber);
     xhr.send();
 }
