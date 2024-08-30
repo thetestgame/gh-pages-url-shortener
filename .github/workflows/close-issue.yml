@@ -7,7 +7,7 @@ on:
 jobs:
   close-issue:
     runs-on: ubuntu-latest  # Run the job on the latest version of Ubuntu
-
+    permissions: write-all  # Allow the job to write to the repository
     steps:
       - name: Check if issue title is a URL
         id: check-url
