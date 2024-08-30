@@ -24,9 +24,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }} 
           script: |
-            github.issues.update({  # Use the 'update' method of the 'issues' API to close the issue
-              owner: context.repo.owner,  # Get the owner of the repository
-              repo: context.repo.repo,  # Get the repository name
-              issue_number: context.issue.number,  # Get the issue number
-              state: 'closed'  # Set the state of the issue to 'closed'
+            github.issues.update({ 
+              owner: context.repo.owner,
+              repo: context.repo.repo, 
+              issue_number: context.issue.number,
+              state: 'closed'
             })
