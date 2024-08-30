@@ -29,6 +29,7 @@ const PATH_SEGMENTS_TO_SKIP = 0;
 /**
  * Checks if a string is a valid URL. This function is based 
  * on Regex from https://stackoverflow.com/a/3809435
+ * @function isUrl
  * @param {*} url Url to check
  * @returns true if the string is a valid URL, false otherwise
  */
@@ -90,7 +91,7 @@ function redirectToPage(response) {
 
     // Redirect to to the redirect URL   
     console.log("Redirecting to: " + redirectUrl);
-    // location.replace(redirectUrl); 
+    location.replace(redirectUrl); 
 }
 
 /**
