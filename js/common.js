@@ -24,7 +24,7 @@
 
 // Define our constants
 const GITHUB_ISSUES_LINK ="https://api.github.com/repos/thetestgame/gh-pages-url-shortener/issues/";
-const BASE_SHORTENER_URL = "https://thetest.games/";
+const BASE_SHORTENER_URL = "https://links.thetest.games/";
 
 /**
  * Retrieves the base URL of the current website.
